@@ -742,8 +742,23 @@ function esc(s) {
 
 /* ── démarrage ────────────────────────────────────────────── */
 
+const splashEl = $('#splash');
+const splashAt = Date.now();
+
+function hideSplash() {
+  if (!splashEl || splashEl.dataset.done) return;
+  splashEl.dataset.done = '1';
+  /* durée minimale : un splash de 80 ms ressemble à un clignotement */
+  const wait = Math.max(0, 420 - (Date.now() - splashAt));
+  setTimeout(() => {
+    splashEl.classList.add('off');
+    setTimeout(() => splashEl.remove(), 640);
+  }, wait);
+}
+
 async function init() {
   applyTheme(state.theme, false);
+  setTimeout(hideSplash, 1800);   /* filet si le réseau traîne */
 
   const cache = read('cache');
   const hasCache = cache?.data && state.place && samePlace(cache.place, state.place);
@@ -752,6 +767,7 @@ async function init() {
     state.data = cache.data;
     state.at = cache.at || 0;
     paint();
+    hideSplash();
   } else {
     skeleton();
   }
@@ -769,6 +785,7 @@ async function init() {
   setUnit();
   paintPlace();
   await load({ first: !hasCache });
+  hideSplash();
   tick();
 
   setInterval(tick, 20000);

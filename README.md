@@ -8,6 +8,7 @@ Météo minimale, mobile vertical — six thèmes repris d'Omarchy.
 - les 20 derniers lieux choisis restent en mémoire locale (feuille de recherche)
 - dernière météo en cache local + service worker → l'app s'ouvre hors ligne
 - PWA installable : manifeste, icônes maskables, métadonnées Open Graph
+- écran d'ouverture dans la palette du thème (fond posé avant le CSS, pas de flash blanc)
 - bandeau d'installation en bas d'écran (prompt natif sur Android, « Partager →
   sur l'écran d'accueil » sur iOS), refermable, masqué en mode standalone et
   sur desktop
