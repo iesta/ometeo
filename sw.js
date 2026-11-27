@@ -1,4 +1,4 @@
-const V = 'ometeo-v6';
+const V = 'ometeo-v7';
 const SHELL = ['./', './index.html', './styles.css', './app.js', './icon.svg', './manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {

@@ -6,6 +6,7 @@ Météo minimale, mobile vertical — six thèmes repris d'Omarchy.
 - données [Open-Meteo](https://open-meteo.com) (aucune clé, CORS ouvert)
 - géolocalisation au premier lancement, sinon recherche de ville
 - les 20 derniers lieux choisis restent en mémoire locale (feuille de recherche)
+- taille du texte réglable en trois crans (normale, grande, très grande)
 - dernière météo en cache local + service worker → l'app s'ouvre hors ligne
 - PWA installable : manifeste, icônes maskables, métadonnées Open Graph
 - écran d'ouverture dans la palette du thème (fond posé avant le CSS, pas de flash blanc)
@@ -21,8 +22,9 @@ Météo minimale, mobile vertical — six thèmes repris d'Omarchy.
 
 ## Thèmes
 
-Le bouton ◐ de la barre ouvre le sélecteur ; le choix est gardé dans
-`localStorage` (`ometeo.theme`) et appliqué avant le premier rendu, sans flash.
+Le bouton ◐ de la barre ouvre la feuille **Affichage** (palettes + taille du
+texte). Les deux choix sont gardés dans `localStorage` (`ometeo.theme`,
+`ometeo.fs`) et appliqués avant le premier rendu, sans flash.
 
 | id | nom | couleur |
 |---|---|---|

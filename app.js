@@ -30,11 +30,13 @@ const results  = $('#results');
 const themeBtn   = $('#themeBtn');
 const themeSheet = $('#themeSheet');
 const themeList  = $('#themeList');
+const fsSeg      = $('#fsSeg');
 
 const state = {
   place: read('place') || null,
   unit: read('unit') || 'C',
   theme: read('theme') || 'aether',
+  fs: read('fs') || 'm',
   recent: read('recent') || [],
   kind: 'clear',
   data: null,
@@ -507,6 +509,23 @@ themeList.addEventListener('click', (e) => {
   if (b) applyTheme(b.dataset.themeId);
 });
 
+/* taille du texte : m = normale, l = grande, xl = très grande */
+
+const FS = ['m', 'l', 'xl'];
+
+function applyFs(id, save = true) {
+  const v = FS.includes(id) ? id : 'm';
+  document.documentElement.dataset.fs = v;
+  if (save) write('fs', v);
+  fsSeg.querySelectorAll('[data-fs-id]').forEach((b) =>
+    b.setAttribute('aria-pressed', String(b.dataset.fsId === v)));
+}
+
+fsSeg.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-fs-id]');
+  if (b) applyFs(b.dataset.fsId);
+});
+
 function openThemes() {
   themeSheet.classList.add('open');
   themeSheet.setAttribute('aria-hidden', 'false');
@@ -758,6 +777,7 @@ function hideSplash() {
 
 async function init() {
   applyTheme(state.theme, false);
+  applyFs(state.fs, false);
   setTimeout(hideSplash, 1800);   /* filet si le réseau traîne */
 
   const cache = read('cache');
