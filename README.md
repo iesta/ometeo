@@ -50,18 +50,17 @@ Le dossier est servi tel quel, sans build, par un service systemd utilisateur
 | depuis | adresse |
 |---|---|
 | cette machine | http://localhost:8801 |
-| le Wi-Fi de la maison | http://192.168.50.220:8801 |
-| le tailnet (HTTPS, géoloc OK) | https://oma.tailfb51b4.ts.net:8443 |
+| le réseau local | `http://<ip-de-la-machine>:8801` |
 
 ```sh
 systemctl --user status ometeo     # état
 systemctl --user restart ometeo    # après une modif (les fichiers sont servis en direct)
-tailscale serve --https=8443 off   # retire l'accès tailnet
 ```
 
-L'HTTPS passe par `tailscale serve` (entrée séparée sur le port 8443 ; le 443
-du tailnet reste occupé par Collie). Sur `http://` hors localhost, le navigateur
-bloque la géolocalisation : l'app retombe sur Bruxelles, ou sur la ville cherchée.
+Pour une adresse HTTPS (nécessaire à la géolocalisation hors localhost), un
+tunnel `tailscale serve` ou un hébergement statique fait l'affaire. Sur `http://`
+hors localhost, le navigateur bloque la géolocalisation : l'app retombe sur
+Bruxelles, ou sur la ville cherchée.
 
 Pour un simple essai sans service :
 
@@ -75,6 +74,8 @@ python3 -m http.server 8080
 
 Le dossier tel quel suffit (statique, aucune étape de build).
 
-`og:url`, `og:image` et le `canonical` pointent sur
-`https://oma.tailfb51b4.ts.net:8443/` : à changer dans `index.html` si l'app
-déménage, sinon l'aperçu de partage pointera vers l'ancienne adresse.
+En ligne sur GitHub Pages : **https://iesta.github.io/ometeo/**
+
+`og:url`, `og:image` et le `canonical` pointent sur cette adresse : à changer
+dans `index.html` si l'app déménage, sinon l'aperçu de partage pointera vers
+l'ancienne.
