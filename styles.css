@@ -598,6 +598,78 @@ main::-webkit-scrollbar{ display:none; }
   transition:transform .4s var(--ease);
 }
 
+/* ── barre d'installation ─────────────────────────────────── */
+
+.install[hidden]{ display:none; }
+.install{
+  flex:none;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:11px 14px calc(11px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line-2);
+  background:color-mix(in srgb, var(--bg) 90%, var(--fg));
+  animation:installIn .32s var(--ease);
+}
+@keyframes installIn{ from{ transform:translateY(100%); } }
+
+.install-ico{
+  flex:none;
+  width:26px; height:26px;
+  display:grid;
+  place-items:center;
+  color:var(--accent-2);
+}
+.install-ico svg{
+  width:17px; height:17px;
+  fill:none; stroke:currentColor; stroke-width:1.4;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.install-txt{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.install-txt b{
+  font-size:9.5px;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--fg);
+}
+.install-txt span{
+  font-size:9.5px;
+  color:var(--dim);
+  letter-spacing:.02em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.install-go{
+  flex:none;
+  padding:7px 11px;
+  border:1px solid color-mix(in srgb, var(--accent-2) 40%, transparent);
+  border-radius:2px;
+  font-size:9px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent-2);
+  transition:background .2s;
+}
+.install-go[hidden]{ display:none; }
+.install-go:hover{ background:color-mix(in srgb, var(--accent-2) 10%, transparent); }
+.install-x{
+  flex:none;
+  width:24px; height:24px;
+  display:grid;
+  place-items:center;
+  color:var(--dim);
+}
+.install-x svg{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; }
+.install-x:hover{ color:var(--fg); }
+
 /* ── pied ──────────────────────────────────────────────────── */
 
 .foot{

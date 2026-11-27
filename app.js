@@ -524,6 +524,73 @@ themeSheet.addEventListener('click', (e) => {
   if (e.target.closest('[data-close-theme]')) closeThemes();
 });
 
+/* ── installer l'app ──────────────────────────────────────── */
+
+const installBar  = $('#install');
+const installGo   = $('#installGo');
+const installHint = $('#installHint');
+
+let installEvent = null;
+
+const isStandalone = () =>
+  window.matchMedia('(display-mode: standalone)').matches ||
+  window.matchMedia('(display-mode: fullscreen)').matches ||
+  window.navigator.standalone === true;
+
+const isIOS = () =>
+  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+const isMobile = () => isIOS() || /Android|Mobile/i.test(navigator.userAgent);
+
+function showInstall(mode) {
+  if (!isMobile() || isStandalone() || read('installOff')) return;
+
+  if (mode === 'prompt') {
+    installHint.textContent = 'Plein écran, comme une app';
+    installGo.hidden = false;
+  } else {
+    installHint.textContent = isIOS()
+      ? 'Partager → sur l’écran d’accueil'
+      : 'Menu ⋮ → installer l’application';
+    installGo.hidden = true;
+  }
+  installBar.hidden = false;
+}
+
+function closeInstall() {
+  installBar.hidden = true;
+  write('installOff', Date.now());
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  installEvent = e;
+  showInstall('prompt');
+});
+
+window.addEventListener('appinstalled', () => {
+  installBar.hidden = true;
+  write('installOff', Date.now());
+});
+
+installGo.addEventListener('click', async () => {
+  if (!installEvent) return;
+  installEvent.prompt();
+  try { await installEvent.userChoice; } catch (e) {}
+  installEvent = null;
+  closeInstall();
+});
+
+installBar.addEventListener('click', (e) => {
+  if (e.target.closest('[data-close-install]')) closeInstall();
+});
+
+/* pas de prompt natif (iOS, autres navigateurs) : on explique le chemin */
+window.addEventListener('load', () => {
+  setTimeout(() => { if (!installEvent) showInstall('hint'); }, 1600);
+});
+
 /* ── feuille « lieu » ─────────────────────────────────────── */
 
 function openSheet() {
