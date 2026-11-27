@@ -57,10 +57,19 @@ systemctl --user status ometeo     # état
 systemctl --user restart ometeo    # après une modif (les fichiers sont servis en direct)
 ```
 
-Pour une adresse HTTPS (nécessaire à la géolocalisation hors localhost), un
-tunnel `tailscale serve` ou un hébergement statique fait l'affaire. Sur `http://`
-hors localhost, le navigateur bloque la géolocalisation : l'app retombe sur
-Bruxelles, ou sur la ville cherchée.
+La géolocalisation exige HTTPS hors `localhost`. Deux façons d'en avoir sans
+rien déployer ailleurs :
+
+```sh
+# 1. tunnel Tailscale, visible du tailnet seulement
+tailscale serve --bg --https=8443 http://127.0.0.1:8801   # -> https://<machine>.<tailnet>.ts.net:8443
+tailscale serve --https=8443 off                          # pour couper
+
+# 2. GitHub Pages, si le dépôt est public
+```
+
+Sur `http://` hors localhost, le navigateur bloque la géolocalisation : l'app
+retombe sur Bruxelles, ou sur la ville cherchée.
 
 Pour un simple essai sans service :
 
