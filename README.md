@@ -9,6 +9,12 @@ Météo minimale, mobile vertical — six thèmes repris d'Omarchy.
 - dernière météo en cache local + service worker → l'app s'ouvre hors ligne
 - PWA installable : manifeste, icônes maskables, métadonnées Open Graph
 
+## Captures
+
+| Tokyo — Tokyo Rain | Milano — Lumon | San Francisco — Dusk |
+|:--:|:--:|:--:|
+| <img src="shots/tokyo.webp" width="230" alt="Tokyo, thème Tokyo Rain"> | <img src="shots/milano.webp" width="230" alt="Milano, thème Lumon"> | <img src="shots/san-francisco.webp" width="230" alt="San Francisco, thème Dusk"> |
+
 ## Thèmes
 
 Le bouton ◐ de la barre ouvre le sélecteur ; le choix est gardé dans
