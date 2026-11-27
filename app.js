@@ -35,11 +35,15 @@ const state = {
   place: read('place') || null,
   unit: read('unit') || 'C',
   theme: read('theme') || 'aether',
+  recent: read('recent') || [],
   kind: 'clear',
   data: null,
   at: 0,
   busy: false
 };
+
+const RECENT_MAX = 20;
+const placeKey = (p) => `${p.lat.toFixed(3)},${p.lon.toFixed(3)}`;
 
 /* ── stockage ─────────────────────────────────────────────── */
 
@@ -526,8 +530,50 @@ function openSheet() {
   sheet.classList.add('open');
   sheet.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  searchEl.value = '';
+  renderRecents();
   setTimeout(() => searchEl.focus(), 80);
 }
+
+/* ── derniers lieux (20 max, en local) ────────────────────── */
+
+function rememberPlace(p) {
+  const next = [p, ...(state.recent || []).filter((x) => placeKey(x) !== placeKey(p))]
+    .slice(0, RECENT_MAX);
+  state.recent = next;
+  write('recent', next);
+  write('place', p);
+}
+
+function renderRecents() {
+  const list = state.recent || [];
+  if (!list.length) {
+    results.innerHTML = '<li class="empty">Tapez le nom d’une ville</li>';
+    return;
+  }
+  const cur = state.place ? placeKey(state.place) : null;
+  results.innerHTML =
+    `<li class="sep"><span>Récents</span><button type="button" data-clear-recent>effacer</button></li>` +
+    list.map((p, i) => `
+      <li><button type="button" data-recent="${i}"${placeKey(p) === cur ? ' aria-current="true"' : ''}>
+        <span class="rn">${esc(p.name)}</span>
+        <span class="rm">${esc([p.admin, p.country].filter(Boolean).join(' · ')) || '—'}</span>
+      </button></li>`).join('');
+}
+
+results.addEventListener('click', (e) => {
+  if (e.target.closest('[data-clear-recent]')) {
+    state.recent = [];
+    write('recent', []);
+    renderRecents();
+    return;
+  }
+  const b = e.target.closest('[data-recent]');
+  if (b) {
+    const p = state.recent[+b.dataset.recent];
+    if (p) pick(p);
+  }
+});
 
 function closeSheet() {
   sheet.classList.remove('open');
@@ -550,7 +596,7 @@ searchEl.addEventListener('input', () => {
   clearTimeout(searchTimer);
   const q = searchEl.value.trim();
   if (q.length < 2) {
-    results.innerHTML = '<li class="empty">Deux lettres minimum</li>';
+    renderRecents();
     return;
   }
   searchTimer = setTimeout(() => runSearch(q), 260);
@@ -603,11 +649,10 @@ async function runSearch(q) {
 function pick(place) {
   closeSheet();
   searchEl.value = '';
-  results.innerHTML = '<li class="empty">Tapez le nom d’une ville</li>';
   state.place = place;
   state.data = null;
   state.at = 0;
-  write('place', place);
+  rememberPlace(place);
   paintPlace();
   skeleton();
   load({ first: true });

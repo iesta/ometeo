@@ -814,6 +814,31 @@ main::-webkit-scrollbar{ display:none; }
   text-transform:uppercase;
 }
 
+.results .sep{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 2px 8px;
+  border-bottom:0;
+  font-size:8.5px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--faint);
+}
+.results .sep button{
+  width:auto;
+  padding:0;
+  font-size:8.5px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--dim);
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.results .sep button:hover{ color:var(--accent-2); }
+.results button[aria-current="true"] .rn{ color:var(--accent-2); }
+
 /* ── thèmes ────────────────────────────────────────────────── */
 
 .themes{

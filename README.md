@@ -5,6 +5,7 @@ Météo minimale, mobile vertical — six thèmes repris d'Omarchy.
 - zéro dépendance, trois fichiers (`index.html`, `styles.css`, `app.js`)
 - données [Open-Meteo](https://open-meteo.com) (aucune clé, CORS ouvert)
 - géolocalisation au premier lancement, sinon recherche de ville
+- les 20 derniers lieux choisis restent en mémoire locale (feuille de recherche)
 - dernière météo en cache local + service worker → l'app s'ouvre hors ligne
 - PWA installable : manifeste, icônes maskables, métadonnées Open Graph
 
