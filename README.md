@@ -1,25 +1,39 @@
 # ometeo
 
-Météo minimale, mobile vertical, noir et violet — dans l'esprit d'Omarchy.
+Météo minimale, mobile vertical — six thèmes repris d'Omarchy.
 
 - zéro dépendance, trois fichiers (`index.html`, `styles.css`, `app.js`)
 - données [Open-Meteo](https://open-meteo.com) (aucune clé, CORS ouvert)
 - géolocalisation au premier lancement, sinon recherche de ville
 - dernière météo en cache local + service worker → l'app s'ouvre hors ligne
-- PWA installable (`manifest.webmanifest`)
+- PWA installable : manifeste, icônes maskables, métadonnées Open Graph
 
-## Palette
+## Thèmes
 
-Reprise du thème Omarchy actif, `aether` :
+Le bouton ◐ de la barre ouvre le sélecteur ; le choix est gardé dans
+`localStorage` (`ometeo.theme`) et appliqué avant le premier rendu, sans flash.
 
-| rôle | valeur |
-|---|---|
-| fond | `#00040C` |
-| texte | `#F1DDFF` |
-| accent | `#7774B6` / `#B597E9` |
-| froid | `#8BC4FF` |
+| id | nom | couleur |
+|---|---|---|
+| `aether` | Aether | violet, thème actif d'Omarchy (défaut) |
+| `lumon` | Lumon | bleu glacé |
+| `black-sand` | Black Sand | acier neutre |
+| `tokyorain` | Tokyo Rain | noir profond, cyan |
+| `forest` | Forest Night | vert menthe |
+| `dusk` | Dusk | sable et bleu |
 
-Typo : JetBrains Mono (repli Agave Nerd Font Mono, la mono du terminal).
+Chaque thème ne définit que onze couleurs ; le reste (filets, halos, fonds,
+transparences) est dérivé en `color-mix()`. Pour en ajouter un :
+
+1. copier un bloc `[data-theme="…"]` dans `styles.css` avec les couleurs du
+   `colors.toml` du thème Omarchy voulu ;
+2. ajouter une entrée dans `THEMES` (`app.js`) pour le sélecteur.
+
+## Typo
+
+JetBrains Mono (repli Agave Nerd Font Mono, la mono du terminal) et
+Space Grotesk pour le grand chiffre. Le visuel de partage `og.png` est rendu
+depuis `tools/og.html`.
 
 ## Hébergement local
 
@@ -53,3 +67,7 @@ python3 -m http.server 8080
 ## Publier
 
 Le dossier tel quel suffit (statique, aucune étape de build).
+
+`og:url`, `og:image` et le `canonical` pointent sur
+`https://oma.tailfb51b4.ts.net:8443/` : à changer dans `index.html` si l'app
+déménage, sinon l'aperçu de partage pointera vers l'ancienne adresse.

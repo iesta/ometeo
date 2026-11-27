@@ -27,10 +27,15 @@ const footMeta = $('#footMeta');
 const sheet    = $('#sheet');
 const searchEl = $('#search');
 const results  = $('#results');
+const themeBtn   = $('#themeBtn');
+const themeSheet = $('#themeSheet');
+const themeList  = $('#themeList');
 
 const state = {
   place: read('place') || null,
   unit: read('unit') || 'C',
+  theme: read('theme') || 'aether',
+  kind: 'clear',
   data: null,
   at: 0,
   busy: false
@@ -52,7 +57,7 @@ const samePlace = (a, b) => a && b && Math.abs(a.lat - b.lat) < 0.001 && Math.ab
 const WMO = {
   0:  ['Ciel dégagé', 'clear'],
   1:  ['Peu nuageux', 'partly'],
-  2:  ['Partiellement nuageux', 'partly'],
+  2:  ['Nuageux', 'partly'],
   3:  ['Couvert', 'cloud'],
   45: ['Brouillard', 'fog'],
   48: ['Brouillard givrant', 'fog'],
@@ -79,7 +84,7 @@ const WMO = {
   96: ['Orage grêleux', 'thunder'],
   99: ['Orage grêleux', 'thunder']
 };
-const NIGHT = { 0: 'Ciel clair', 1: 'Peu nuageux', 2: 'Partiellement nuageux' };
+const NIGHT = { 0: 'Ciel clair', 1: 'Peu nuageux', 2: 'Nuageux' };
 
 function weather(code, isDay = 1) {
   const hit = WMO[code] || ['—', 'cloud'];
@@ -279,7 +284,8 @@ function paintHero() {
   const day = d.daily;
   const w = weather(cur.weather_code, cur.is_day);
 
-  app.style.setProperty('--tint', TINT[w.kind] || TINT.cloud);
+  state.kind = w.kind;
+  paintTint(w.kind);
 
   const dt = new Date(stamp(cur.time));
   const weekday = new Intl.DateTimeFormat('fr-FR', { timeZone: 'UTC', weekday: 'short' }).format(dt).replace('.', '');
@@ -292,7 +298,7 @@ function paintHero() {
       <div>
         <div class="date">${weekday} ${date} · ${hhmm(cur.time)}</div>
         <div class="temp"><span class="num">${deg(cur.temperature_2m).replace('°', '').replace('−', '<span class="minus">−</span>')}</span><span class="deg">°</span></div>
-        <div class="cond"><b>${w.label}</b><span class="sep">·</span><span>ressenti ${deg(cur.apparent_temperature)}</span></div>
+        <div class="cond"><b>${w.label}</b><span class="feels"><span class="sep">·</span>ressenti ${deg(cur.apparent_temperature)}</span></div>
       </div>
       <div class="hero-icon">${svg(w.kind)}</div>
     </div>
@@ -304,18 +310,13 @@ function paintHero() {
     </div>`;
 }
 
-const TINT = {
-  clear:   'rgba(181,151,233,.20)',
-  moon:    'rgba(139,196,255,.14)',
-  partly:  'rgba(160,150,220,.16)',
-  partlyNight: 'rgba(139,170,235,.13)',
-  cloud:   'rgba(150,155,175,.11)',
-  fog:     'rgba(165,165,185,.10)',
-  drizzle: 'rgba(139,180,255,.13)',
-  rain:    'rgba(139,196,255,.16)',
-  snow:    'rgba(200,220,255,.15)',
-  thunder: 'rgba(181,151,233,.22)'
-};
+/* halo du haut : froid pour l'eau, accent pour le ciel */
+const COOL = ['rain', 'drizzle', 'snow', 'fog', 'thunder', 'cloud'];
+
+function paintTint(kind) {
+  const v = COOL.includes(kind) ? 'cold' : 'accent-2';
+  app.style.setProperty('--tint', `color-mix(in srgb, var(--${v}) 20%, transparent)`);
+}
 
 function paintHours() {
   const d = state.data;
@@ -457,6 +458,68 @@ refresh.addEventListener('click', () => load());
 
 noticeBt.addEventListener('click', () => load());
 
+/* ── thèmes ───────────────────────────────────────────────── */
+
+const THEMES = [
+  { id: 'aether',     name: 'Aether',       tone: 'violet',  bg: '#00040C', accent: '#7774B6', fg: '#F1DDFF' },
+  { id: 'lumon',      name: 'Lumon',        tone: 'glacé',   bg: '#16242D', accent: '#6FB8E3', fg: '#D6E2EE' },
+  { id: 'black-sand', name: 'Black Sand',   tone: 'acier',   bg: '#14181E', accent: '#8EA7C2', fg: '#CED6E0' },
+  { id: 'tokyorain',  name: 'Tokyo Rain',   tone: 'cyan',    bg: '#0C0B0D', accent: '#A4E5FF', fg: '#F2F1EC' },
+  { id: 'forest',     name: 'Forest Night', tone: 'vert',    bg: '#1A2125', accent: '#4ECDC4', fg: '#C9D1D9' },
+  { id: 'dusk',       name: 'Dusk',         tone: 'sable',   bg: '#0E1720', accent: '#C8CD94', fg: '#D5CEB1' }
+];
+
+function applyTheme(id, save = true) {
+  const t = THEMES.find((x) => x.id === id) || THEMES[0];
+  state.theme = t.id;
+  document.documentElement.dataset.theme = t.id;
+  if (save) write('theme', t.id);
+
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', t.bg);
+
+  paintTint(state.kind);
+  renderThemes();
+}
+
+function renderThemes() {
+  themeList.innerHTML = THEMES.map((t) => `
+    <li>
+      <button type="button" data-theme-id="${t.id}"${t.id === state.theme ? ' aria-current="true"' : ''}>
+        <span class="swatch" aria-hidden="true">
+          <i style="background:${t.bg}"></i>
+          <i style="background:${t.accent}"></i>
+          <i style="background:${t.fg}"></i>
+        </span>
+        <span class="tn">${t.name}</span>
+        <span class="td">${t.tone}</span>
+        <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </button>
+    </li>`).join('');
+}
+
+themeList.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-theme-id]');
+  if (b) applyTheme(b.dataset.themeId);
+});
+
+function openThemes() {
+  themeSheet.classList.add('open');
+  themeSheet.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeThemes() {
+  themeSheet.classList.remove('open');
+  themeSheet.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+themeBtn.addEventListener('click', openThemes);
+themeSheet.addEventListener('click', (e) => {
+  if (e.target.closest('[data-close-theme]')) closeThemes();
+});
+
 /* ── feuille « lieu » ─────────────────────────────────────── */
 
 function openSheet() {
@@ -475,7 +538,9 @@ function closeSheet() {
 
 $('#locBtn').addEventListener('click', openSheet);
 sheet.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) closeSheet(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSheet(); });
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeSheet(); closeThemes(); }
+});
 
 results.innerHTML = '<li class="empty">Tapez le nom d’une ville</li>';
 
@@ -566,6 +631,8 @@ function esc(s) {
 /* ── démarrage ────────────────────────────────────────────── */
 
 async function init() {
+  applyTheme(state.theme, false);
+
   const cache = read('cache');
   const hasCache = cache?.data && state.place && samePlace(cache.place, state.place);
 

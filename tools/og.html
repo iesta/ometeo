@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>ometeo — og</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&family=Space+Grotesk:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  html,body{ margin:0; padding:0; width:1200px; height:630px; overflow:hidden; background:#00040C; }
+  body{ position:relative; font-family:'JetBrains Mono',monospace; color:#F1DDFF; }
+
+  .glow{ position:absolute; inset:0; background:
+      radial-gradient(38% 46% at 20% 16%, rgba(139,135,216,.32), transparent 70%),
+      radial-gradient(30% 40% at 88% 6%, rgba(139,196,255,.10), transparent 70%); }
+  .lines{ position:absolute; inset:0; opacity:.9;
+      background-image:repeating-linear-gradient(90deg, rgba(241,221,255,.055) 0 1px, transparent 1px 120px); }
+  .frame{ position:absolute; inset:26px; border:1px solid rgba(241,221,255,.10); }
+
+  .left{ position:absolute; left:82px; top:158px; }
+  h1{ margin:0; font-family:'Space Grotesk',sans-serif; font-weight:300; font-size:150px;
+      line-height:.82; letter-spacing:-.045em; color:#F1DDFF;
+      text-shadow:0 0 90px rgba(181,151,233,.28); }
+  .deg{ color:#B597E9; font-size:.32em; vertical-align:.72em; letter-spacing:0; margin-left:.03em; text-shadow:none; }
+
+  .tag{ margin-top:38px; display:flex; align-items:center; gap:16px;
+      font-size:18px; letter-spacing:.30em; text-transform:uppercase; color:rgba(241,221,255,.70); }
+  .tag i{ display:block; width:46px; height:1px; background:#7774B6; }
+
+  .meta{ position:absolute; left:82px; bottom:74px; font-size:13px; letter-spacing:.26em;
+      text-transform:uppercase; color:rgba(241,221,255,.38); }
+
+  .medallion{ position:absolute; right:92px; top:112px; width:300px; height:300px; border-radius:50%;
+      border:1px solid rgba(241,221,255,.13); display:grid; place-items:center; }
+  .medallion::after{ content:""; position:absolute; inset:26px; border-radius:50%;
+      border:1px solid rgba(241,221,255,.05); }
+  .moon{ width:146px; height:146px; color:#B597E9; filter:drop-shadow(0 0 28px rgba(181,151,233,.45)); }
+  .moon svg{ width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1;
+      stroke-linecap:round; stroke-linejoin:round; }
+
+  .temp{ position:absolute; right:92px; top:438px; width:300px; text-align:center;
+      font-family:'Space Grotesk',sans-serif; font-weight:300; font-size:72px; letter-spacing:-.03em; }
+  .temp small{ display:block; margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:12px;
+      letter-spacing:.26em; text-transform:uppercase; color:rgba(241,221,255,.42); }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="lines"></div>
+  <div class="frame"></div>
+
+  <div class="left">
+    <h1>ometeo<span class="deg">°</span></h1>
+    <div class="tag"><i></i>La météo, en noir et violet</div>
+  </div>
+
+  <div class="meta">Open-Meteo · PWA · sans clé · 24 h / 7 jours</div>
+
+  <div class="medallion">
+    <div class="moon">
+      <svg viewBox="0 0 24 24"><path d="M20.4 14.4A8.6 8.6 0 0 1 9.6 3.6a8.6 8.6 0 1 0 10.8 10.8z"/></svg>
+    </div>
+  </div>
+
+  <div class="temp">−1°<small>Bruxelles · 10:15</small></div>
+</body>
+</html>

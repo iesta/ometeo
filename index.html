@@ -3,16 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ometeo</title>
-<meta name="description" content="Météo minimale, en noir et violet. Données Open-Meteo.">
+<title>ometeo — la météo, en noir et violet</title>
+<meta name="description" content="Météo mobile verticale façon Omarchy : maintenant, 24 h, 7 jours et détails. Données Open-Meteo, sans clé, installable.">
+<meta name="application-name" content="ometeo">
 <meta name="theme-color" content="#00040C">
 <meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ometeo">
+<link rel="canonical" href="https://oma.tailfb51b4.ts.net:8443/">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ometeo">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://oma.tailfb51b4.ts.net:8443/">
+<meta property="og:title" content="ometeo — la météo, en noir et violet">
+<meta property="og:description" content="Météo mobile verticale façon Omarchy : maintenant, 24 h, 7 jours et détails. Données Open-Meteo, sans clé, installable.">
+<meta property="og:image" content="https://oma.tailfb51b4.ts.net:8443/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ometeo, la météo en noir et violet">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ometeo — la météo, en noir et violet">
+<meta name="twitter:description" content="Météo mobile verticale façon Omarchy : maintenant, 24 h, 7 jours et détails. Données Open-Meteo, sans clé, installable.">
+<meta name="twitter:image" content="https://oma.tailfb51b4.ts.net:8443/og.png">
+
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
+<script>
+  /* thème appliqué avant le premier rendu (pas de flash) */
+  try{
+    var t = JSON.parse(localStorage.getItem('ometeo.theme') || 'null');
+    if (t && /^[a-z0-9-]+$/.test(t)) document.documentElement.dataset.theme = t;
+  }catch(e){}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500&family=Space+Grotesk:wght@300;400&display=swap" rel="stylesheet">
@@ -30,6 +58,9 @@
     </button>
     <div class="bar-r">
       <span class="clock" id="clock">--:--</span>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Changer de thème">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16Z" fill="currentColor" stroke="none"/></svg>
+      </button>
       <button class="unit" id="unitBtn" type="button" aria-label="Changer d'unité">°C</button>
       <button class="icon-btn" id="refreshBtn" type="button" aria-label="Actualiser">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 3v5h-5"/></svg>
@@ -75,6 +106,21 @@
     </button>
     <ul class="results" id="results" aria-live="polite"></ul>
     <p class="sheet-note">Données Open-Meteo</p>
+  </div>
+</div>
+
+<div class="sheet flat" id="themeSheet" aria-hidden="true">
+  <div class="sheet-bg" data-close-theme></div>
+  <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="themeTitle">
+    <div class="sheet-grab" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <h2 id="themeTitle">Thème</h2>
+      <button class="icon-btn" type="button" data-close-theme aria-label="Fermer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="themes" id="themeList"></ul>
+    <p class="sheet-note">Palettes Omarchy · mémorisé sur cet appareil</p>
   </div>
 </div>
 
