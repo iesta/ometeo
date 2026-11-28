@@ -34,6 +34,13 @@ texte). Les deux choix sont gardés dans `localStorage` (`ometeo.theme`,
 | `tokyorain` | Tokyo Rain | noir profond, cyan |
 | `forest` | Forest Night | vert menthe |
 | `dusk` | Dusk | sable et bleu |
+| `dawn` | Dawn | blanc bleuté, portage d'`omalaunch-dawn` |
+| `paper` | Paper | crème et terracotta |
+| `mint` | Mint | blanc verdâtre |
+
+> Dawn reprend le thème clair `omalaunch-dawn` d'Omarchy ; Paper et Mint sont
+> deux déclinaisons maison dans le même esprit. Les thèmes clairs passent en
+> `color-scheme: light` et se donnent un `--page` plus soutenu pour le cadre.
 
 Chaque thème ne définit que onze couleurs ; le reste (filets, halos, fonds,
 transparences) est dérivé en `color-mix()`. Pour en ajouter un :

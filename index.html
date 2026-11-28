@@ -41,7 +41,8 @@
     var t = JSON.parse(localStorage.getItem('ometeo.theme') || 'null');
     var bgs = {
       'aether':'#00040C', 'lumon':'#16242D', 'black-sand':'#14181E',
-      'tokyorain':'#0C0B0D', 'forest':'#1A2125', 'dusk':'#0E1720'
+      'tokyorain':'#0C0B0D', 'forest':'#1A2125', 'dusk':'#0E1720',
+      'dawn':'#FBFDFF', 'paper':'#F6F1E7', 'mint':'#F1F5F2'
     };
     if (t && /^[a-z0-9-]+$/.test(t)) {
       document.documentElement.dataset.theme = t;

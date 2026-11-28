@@ -472,7 +472,10 @@ const THEMES = [
   { id: 'black-sand', name: 'Black Sand',   tone: 'acier',   bg: '#14181E', accent: '#8EA7C2', fg: '#CED6E0' },
   { id: 'tokyorain',  name: 'Tokyo Rain',   tone: 'cyan',    bg: '#0C0B0D', accent: '#A4E5FF', fg: '#F2F1EC' },
   { id: 'forest',     name: 'Forest Night', tone: 'vert',    bg: '#1A2125', accent: '#4ECDC4', fg: '#C9D1D9' },
-  { id: 'dusk',       name: 'Dusk',         tone: 'sable',   bg: '#0E1720', accent: '#C8CD94', fg: '#D5CEB1' }
+  { id: 'dusk',       name: 'Dusk',         tone: 'sable',   bg: '#0E1720', accent: '#C8CD94', fg: '#D5CEB1' },
+  { id: 'dawn',       name: 'Dawn',         tone: 'aube',    bg: '#FBFDFF', accent: '#287FC1', fg: '#17364A' },
+  { id: 'paper',      name: 'Paper',        tone: 'papier',  bg: '#F6F1E7', accent: '#B0623A', fg: '#2A2521' },
+  { id: 'mint',       name: 'Mint',         tone: 'menthe',  bg: '#F1F5F2', accent: '#3D8A72', fg: '#1C2A26' }
 ];
 
 function applyTheme(id, save = true) {
